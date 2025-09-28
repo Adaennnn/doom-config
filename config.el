@@ -49,9 +49,14 @@
 '(org-level-1 :inherit outline-1 :height 1.4)
 '(org-document-title :height 1.6 :bold t :underline nil))
 
-(setq display-line-numbers-type t) ;; Turn line numbers on
-(setq confirm-kill-emacs nil) ;; Don't confirm on exit
+;; Disable line numbers
+(after! vterm
+  (add-hook! 'vterm-mode-hook
+    (defun disable-line-numbers-h ()
+      (display-line-numbers-mode -1))))
 
+(setq confirm-kill-emacs nil) ;; Don't confirm on exit
+(setq display-line-numbers-type t) ;; Turn line numbers on
 ;; Forces Emacs to start in fullscreen
 (when (display-graphic-p)
   (setq initial-frame-alist

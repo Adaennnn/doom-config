@@ -4,7 +4,7 @@
 
 * Table of Contents :toc:
 - [[#doom-settings][Doom Settings]]
-- [[#keybinginds][Keybinginds]]
+- [[#keybindings][Keybindings]]
   - [[#comment-line][Comment Line]]
   - [[#toggle-bindings][Toggle bindings]]
 - [[#markdown][Markdown]]
@@ -13,6 +13,7 @@
 - [[#org][Org]]
   - [[#basic-settings][Basic Settings]]
   - [[#headers-1][Headers]]
+- [[#vterm][Vterm]]
 - [[#sensible-default][Sensible Default]]
 
 * Doom Settings
@@ -21,7 +22,7 @@
 
 (setq doom-font (font-spec :family "Iosevka SS04" :size 15 :weight 'regular))
 #+end_src
-* Keybinginds
+* Keybindings
 ** Comment Line
 #+begin_src emacs-lisp
 (map! :leader
@@ -84,11 +85,18 @@ A custom function to toggle between standard markdown-mode (for editing) and mar
 '(org-level-1 :inherit outline-1 :height 1.4)
 '(org-document-title :height 1.6 :bold t :underline nil))
 #+end_src
+* Vterm
+#+begin_src emacs-lisp
+;; Disable line numbers
+(after! vterm
+  (add-hook! 'vterm-mode-hook
+    (defun disable-line-numbers-h ()
+      (display-line-numbers-mode -1))))
+#+end_src
 * Sensible Default
 #+begin_src emacs-lisp
-(setq display-line-numbers-type t) ;; Turn line numbers on
 (setq confirm-kill-emacs nil) ;; Don't confirm on exit
-
+(setq display-line-numbers-type t) ;; Turn line numbers on
 ;; Forces Emacs to start in fullscreen
 (when (display-graphic-p)
   (setq initial-frame-alist
