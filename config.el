@@ -90,6 +90,110 @@
           ("@medium" . ?6)     ; 1-4h
           ("@long" . ?7))))
 
+(use-package! org-super-agenda
+  :after org-agenda
+  :config
+  (org-super-agenda-mode)
+
+  (setq org-agenda-custom-commands
+        '(("d" "Day View"
+           ((agenda ""
+                    ((org-agenda-span 1)
+                     (org-agenda-start-day ".")
+                     (org-deadline-warning-days 7)
+                     (org-scheduled-past-days 7)
+                     (org-super-agenda-groups
+                      '((:name "Overdue"
+                         :deadline past
+                         :scheduled past
+                         :order 1)
+                        (:name "Today"
+                         :time-grid t
+                         :date today
+                         :deadline today
+                         :scheduled today
+                         :order 2)
+                        (:name "Upcoming"
+                         :deadline future
+                         :scheduled future
+                         :order 3)))))))
+
+          ("w" "Week View"
+           ((agenda ""
+                    ((org-agenda-span 7)
+                     (org-agenda-start-day ".")
+                     (org-agenda-start-on-weekday 0)
+                     (org-super-agenda-groups
+                      '((:name "Overdue"
+                         :deadline past
+                         :scheduled past)
+                        (:name "Today"
+                         :time-grid t
+                         :date today)
+                        (:name "This Week"
+                         :date t)))))))
+
+          ("n" "Next Actions"
+           ((todo "NEXT"
+                  ((org-agenda-overriding-header "Next Actions")))))
+
+          ("W" "Waiting For"
+           ((todo "WAITING"
+                  ((org-agenda-overriding-header "Waiting For")))))
+
+          ("p" "Projects"
+           ((todo "PROJECT|PROJECT-HOLD"
+                  ((org-agenda-overriding-header "")
+                   (org-super-agenda-groups
+                    '((:name "Active Projects"
+                         :todo "PROJECT")
+                      (:name "On Hold"
+                         :todo "PROJECT-HOLD")))))))
+
+          ("c" "Contexts"
+           ((todo "NEXT"
+                  ((org-agenda-overriding-header "")
+                   (org-super-agenda-groups
+                    '((:name "Computer"
+                         :tag "@computer")
+                      (:name "Phone"
+                         :tag "@phone")
+                      (:name "Home"
+                         :tag "@home")
+                      (:name "Office"
+                         :tag "@office")
+                      (:name "Errands"
+                         :tag "@errands")
+                      (:name "Anywhere"
+                         :tag "@anywhere")))))))
+
+          ("e" "Energy-based"
+           ((todo "NEXT"
+                  ((org-agenda-overriding-header "")
+                   (org-super-agenda-groups
+                    '((:name "High Energy"
+                         :tag "@high_energy")
+                      (:name "Medium Energy"
+                         :tag "@medium_energy")
+                      (:name "Low Energy"
+                         :tag "@low_energy")))))))
+
+          ("t" "Time Available"
+           ((todo "NEXT"
+                  ((org-agenda-overriding-header "")
+                   (org-super-agenda-groups
+                    '((:name "Quick (< 15 min)"
+                         :tag "@quick")
+                      (:name "Short (15-60 min)"
+                         :tag "@short")
+                      (:name "Medium (1-4 hours)"
+                         :tag "@medium")
+                      (:name "Long (4+ hours)"
+                         :tag "@long")))))))))
+
+  ;; Additional super-agenda settings
+  (setq org-super-agenda-header-map nil)) ; Disable super-agenda keybindings
+
 (defun adaen/update-project-state ()
   "Auto-update PROJECT states based on child tasks.
   - PROJECT → PROJECT-HOLD: when has WAITING child and no NEXT children
