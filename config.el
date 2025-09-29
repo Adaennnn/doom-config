@@ -67,7 +67,27 @@
 
   (setq org-agenda-files '("~/org/gtd/main.org"))
 
-  (setq org-archive-location "~/org/gtd/archive.org::* %s"))
+  (setq org-archive-location "~/org/gtd/archive.org::* %s")
+
+  (setq org-tag-alist
+        '(;; Contexts
+          ("@home" . ?h)
+          ("@office" . ?o)
+          ("@computer" . ?c)
+          ("@phone" . ?p)
+          ("@errands" . ?e)
+          ("@anywhere" . ?a)
+
+          ;; Energy levels
+          ("@high_energy" . ?1)
+          ("@medium_energy" . ?2)
+          ("@low_energy" . ?3)
+
+          ;; Time estimates
+          ("@quick" . ?4)      ; < 15m
+          ("@short" . ?5)      ; 15-60m
+          ("@medium" . ?6)     ; 1-4h
+          ("@long" . ?7))))
 
 (defun adaen/update-project-state ()
   "Auto-update PROJECT states based on child tasks.

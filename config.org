@@ -75,7 +75,7 @@ Convenient keybindings for common toggles under the `SPC t` prefix. Includes ter
 #+end_src
 * Org Mode
 ** Basic Settings
-Core org-mode configuration including directory structure, TODO keyword sequences, agenda files, and archiving location. Defines two keyword sequences: one for regular tasks (TODO → NEXT → RECURRING → WAITING → DONE) and another for projects (PROJECT → PROJECT-HOLD → PROJECT-DONE) with custom colors for visual distinction.
+Core org-mode configuration including directory structure, TODO keyword sequences, agenda files, archiving location, and GTD-style tags. Defines two keyword sequences: one for regular tasks (TODO → NEXT → RECURRING → WAITING → DONE) and another for projects (PROJECT → PROJECT-HOLD → PROJECT-DONE) with custom colors for visual distinction. The tag system includes contexts (@home, @office, @computer, etc.), energy levels (@high_energy, @medium_energy, @low_energy), and simplified time estimates (@quick < 15m, @short 15-60m, @medium 1-4h, @long 4h+) for effective task filtering and planning.
 
 #+begin_src emacs-lisp
 (after! org
@@ -105,13 +105,30 @@ Core org-mode configuration including directory structure, TODO keyword sequence
 
   (setq org-agenda-files '("~/org/gtd/main.org"))
 
-  (setq org-archive-location "~/org/gtd/archive.org::* %s"))
+  (setq org-archive-location "~/org/gtd/archive.org::* %s")
+
+  (setq org-tag-alist
+        '(;; Contexts
+          ("@home" . ?h)
+          ("@office" . ?o)
+          ("@computer" . ?c)
+          ("@phone" . ?p)
+          ("@errands" . ?e)
+          ("@anywhere" . ?a)
+
+          ;; Energy levels
+          ("@high_energy" . ?1)
+          ("@medium_energy" . ?2)
+          ("@low_energy" . ?3)
+
+          ;; Time estimates
+          ("@quick" . ?4)      ; < 15m
+          ("@short" . ?5)      ; 15-60m
+          ("@medium" . ?6)     ; 1-4h
+          ("@long" . ?7))))
 #+end_src
 ** Auto Update Project State
-Automatically manages project states based on child task changes. Projects switch to PROJECT-HOLD when they
-have WAITING children but no NEXT tasks, become PROJECT-DONE when all children are complete, and return to
-PROJECT from PROJECT-HOLD when NEXT tasks are added. This automation keeps project states synchronized with
-their actual progress without manual updates.
+Automatically manages project states based on child task changes. Projects switch to PROJECT-HOLD when they have WAITING children but no NEXT tasks, become PROJECT-DONE when all children are complete, and return to PROJECT from PROJECT-HOLD when NEXT tasks are added. This automation keeps project states synchronized with their actual progress without manual updates.
 #+begin_src emacs-lisp
 (defun adaen/update-project-state ()
   "Auto-update PROJECT states based on child tasks.
