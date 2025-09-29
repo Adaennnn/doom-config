@@ -41,9 +41,9 @@
   (setq org-todo-keywords
         '((sequence 
            "TODO(t)"
-           "NEXT(n!)"
+           "NEXT(n)"
            "RECURRING(r)"
-           "WAITING(w@/!)"
+           "WAITING(w)"
            "|"
            "DONE(d!)")
           (sequence 
@@ -63,6 +63,41 @@
   (setq org-agenda-files '("~/org/gtd/main.org"))
   
   (setq org-archive-location "~/org/gtd/archive.org::* %s"))
+
+(defun adaen/update-project-state ()
+  "Auto-update PROJECT states based on child tasks.
+  - PROJECT → PROJECT-HOLD: when has WAITING child and no NEXT children
+  - Any → PROJECT-DONE: when all children are DONE
+  - PROJECT-HOLD → PROJECT: when NEXT child added"
+  (save-excursion
+    (org-back-to-heading t)
+    (when (member (org-get-todo-state) '("PROJECT" "PROJECT-HOLD"))
+      (let ((has-next nil)
+            (has-waiting nil)
+            (has-active nil)
+            (all-done t))
+        (org-map-entries
+         (lambda ()
+           (let ((state (org-get-todo-state)))
+             (when state
+               (cond
+                ((string= state "NEXT") (setq has-next t all-done nil))
+                ((string= state "WAITING") (setq has-waiting t all-done nil))
+                ((member state '("TODO" "RECURRING")) 
+                 (setq has-active t all-done nil))))))
+         nil 'tree)
+        (cond
+         (all-done 
+          (org-todo "PROJECT-DONE"))
+         ((and has-waiting (not has-next))
+          (org-todo "PROJECT-HOLD"))
+         ((and (string= (org-get-todo-state) "PROJECT-HOLD") has-next)
+          (org-todo "PROJECT")))))))
+
+(add-hook 'org-after-todo-state-change-hook
+          (lambda ()
+            (when (org-up-heading-safe)
+              (adaen/update-project-state))))
 
 (custom-theme-set-faces!
 'doom-palenight
