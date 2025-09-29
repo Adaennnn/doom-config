@@ -79,21 +79,13 @@ The `adaen/update-project-state` function automatically manages project states:
 - **adaen/toggle-markdown-view-mode**: Switches between markdown-mode (editing) and markdown-view-mode (reading)
 - **adaen/update-project-state**: Auto-updates PROJECT states based on child task completion
 
-## Theming
-
-Uses `doom-palenight` theme with custom font settings (Iosevka SS04 at size 15) and customized header sizes for both Org and Markdown modes. Headers scale progressively from 1.4x (h1) down to 0.7x (h8) for Org mode.
-
-## Commit Message Best Practices
-
-Keep commit messages simple and clear. Focus on clarity over fluff - a good commit message explains what changed and why in the fewest words possible. Avoid unnecessary adjectives or lengthy explanations.
-
 ## Best Practices for config.org Modifications
 
 ### Literate Configuration Guidelines
 
 1. **Section Organization**: Add new configurations to the most appropriate existing section. If no section fits, create a new one with a clear, descriptive name.
 
-2. **Documentation First**: Every code block should be preceded by a description explaining:
+2. **Documentation First**: Code blocks should generally be preceded by a description explaining:
    - What the configuration does
    - Why it's needed
    - Any dependencies or requirements
@@ -119,9 +111,9 @@ Keep commit messages simple and clear. Focus on clarity over fluff - a good comm
    - System Settings: OS-level or Emacs system settings
 
 2. **Naming Conventions**:
-   - Custom functions: Always use `adaen/` prefix (e.g., `adaen/toggle-feature`)
-   - Variables: Use descriptive names, avoid single letters
-   - Keybinding descriptions: Start with verb ("Toggle", "Open", "Insert")
+   - Custom functions: Use `adaen/` prefix (e.g., `adaen/toggle-feature`)
+   - Variables: Prefer descriptive names over single letters
+   - Keybinding descriptions: Generally start with verb ("Toggle", "Open", "Insert")
 
 3. **Load Order Considerations**:
    - Use `after!` macro when configuring packages to ensure they're loaded first
@@ -223,8 +215,12 @@ When your configuration requires new packages:
 1. **Syntax**: Ensure balanced parentheses and proper quoting
 2. **Load Order**: Use `after!` for package-specific settings
 3. **Package Dependencies**: Add to packages.el before using in config.org
-4. **Namespace**: Always prefix custom functions with `adaen/`
-5. **Documentation**: Every code block needs explanatory text
+4. **Namespace**: Prefix custom functions with `adaen/`
+5. **Documentation**: Code blocks should have explanatory text for clarity
+
+### Working Philosophy
+
+These guidelines are meant to help maintain consistency and quality. Use your judgment when the situation calls for a different approach - the goal is readable, maintainable configuration, not rigid adherence to rules. Feel free to suggest improvements or optimizations when you notice opportunities, but avoid creating unnecessary files or over-engineering solutions.
 
 ### Table of Contents Maintenance
 

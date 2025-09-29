@@ -13,6 +13,7 @@
 - [[#org-mode][Org Mode]]
   - [[#basic-settings][Basic Settings]]
   - [[#org-super-agenda][Org Super Agenda]]
+  - [[#org-capture-templates][Org Capture Templates]]
   - [[#auto-update-project-state][Auto Update Project State]]
 - [[#markdown][Markdown]]
   - [[#toggle-markdown-view][Toggle Markdown View]]
@@ -235,6 +236,18 @@ Configures org-super-agenda for enhanced agenda views with smart grouping. Provi
 
   ;; Additional super-agenda settings
   (setq org-super-agenda-header-map nil)) ; Disable super-agenda keybindings
+#+end_src
+
+** Org Capture Templates
+Quick capture template for inbox items. Press `SPC X i` to capture a new task directly to inbox.org.
+#+begin_src emacs-lisp
+(after! org
+  (setq org-capture-bookmark nil) ; Disable bookmark creation on capture
+  (add-to-list 'org-capture-templates
+               '("i" "Inbox" entry
+                 (file "~/org/gtd/inbox.org")
+                 "* %?\n"
+                 :prepend nil)))
 #+end_src
 
 ** Auto Update Project State

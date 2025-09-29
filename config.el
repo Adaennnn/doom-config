@@ -194,6 +194,14 @@
   ;; Additional super-agenda settings
   (setq org-super-agenda-header-map nil)) ; Disable super-agenda keybindings
 
+(after! org
+  (setq org-capture-bookmark nil) ; Disable bookmark creation on capture
+  (add-to-list 'org-capture-templates
+               '("i" "Inbox" entry
+                 (file "~/org/gtd/inbox.org")
+                 "* %?\n"
+                 :prepend nil)))
+
 (defun adaen/update-project-state ()
   "Auto-update PROJECT states based on child tasks.
   - PROJECT → PROJECT-HOLD: when has WAITING child and no NEXT children
