@@ -35,7 +35,34 @@
       (markdown-mode)
     (markdown-view-mode)))
 
-(setq org-directory "~/org/")
+(after! org
+  (setq org-directory "~/org/")
+  
+  (setq org-todo-keywords
+        '((sequence 
+           "TODO(t)"
+           "NEXT(n!)"
+           "RECURRING(r)"
+           "WAITING(w@/!)"
+           "|"
+           "DONE(d!)")
+          (sequence 
+           "PROJECT(p)"
+           "PROJECT-HOLD(h)"
+           "|" 
+           "PROJECT-DONE(D)")))
+  
+  (setq org-todo-keyword-faces
+        '(("TODO" :foreground "#7f8c8d" :weight normal)
+          ("NEXT" :foreground "#27ae60" :weight normal)
+          ("RECURRING" :foreground "#3498db" :weight normal)
+          ("WAITING" :foreground "#e67e22" :weight normal)
+          ("PROJECT" :foreground "#9b59b6" :weight normal)
+          ("PROJECT-HOLD" :foreground "#f39c12" :weight normal)))
+  
+  (setq org-agenda-files '("~/org/gtd/main.org"))
+  
+  (setq org-archive-location "~/org/gtd/archive.org::* %s"))
 
 (custom-theme-set-faces!
 'doom-palenight
