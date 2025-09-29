@@ -39,7 +39,8 @@
 (map! :leader
       (:prefix ("o" . "open here")
        :desc "Open eshell here"    "e" #'+eshell/here
-       :desc "Open vterm here"     "v" #'+vterm/here))
+       :desc "Open vterm here"     "v" #'+vterm/here
+       :desc "Archive completed tasks" "z" #'adaen/archive-completed-tasks))
 
 (after! org
   (setq org-directory "~/org/")
@@ -68,7 +69,8 @@
 
   (setq org-agenda-files '("~/org/gtd/main.org"))
 
-  (setq org-archive-location "~/org/gtd/archive.org::* %s")
+  (setq org-archive-location "~/org/gtd/archive.org::datetree/"
+        org-archive-subtree-save-file-p t)
 
   (setq org-tag-alist
         '(;; Contexts
@@ -236,6 +238,38 @@
           (lambda ()
             (when (org-up-heading-safe)
               (adaen/update-project-state))))
+
+(defun adaen/archive-completed-tasks ()
+  "Archive completed tasks based on their context.
+  - PROJECT-DONE projects: Archive entire subtree with all children
+  - DONE tasks under 'Standalone Tasks': Archive individual task
+  - DONE tasks under 'Recurring Tasks': Archive individual task
+  - Skips DONE children of incomplete projects"
+  (interactive)
+  (let ((archived-count 0))
+    (org-map-entries
+     (lambda ()
+       (let* ((state (org-get-todo-state))
+              (level (org-current-level))
+              (parent-heading (save-excursion
+                               (when (org-up-heading-safe)
+                                 (org-get-heading t t t t)))))
+         (cond
+          ;; Archive PROJECT-DONE at level 2 (projects)
+          ((and (string= state "PROJECT-DONE")
+                (= level 2))
+           (org-archive-subtree)
+           (setq archived-count (1+ archived-count))
+           (setq org-map-continue-from (org-element-property :begin (org-element-at-point))))
+
+          ;; Archive DONE tasks under "Standalone Tasks" or "Recurring Tasks"
+          ((and (string= state "DONE")
+                (member parent-heading '("Standalone Tasks" "Recurring Tasks")))
+           (org-archive-subtree)
+           (setq archived-count (1+ archived-count))
+           (setq org-map-continue-from (org-element-property :begin (org-element-at-point)))))))
+     nil 'file)
+    (message "Archived %d item(s)" archived-count)))
 
 (defun adaen/toggle-markdown-view-mode ()
   "Toggle between `markdown-mode' and `markdown-view-mode'."

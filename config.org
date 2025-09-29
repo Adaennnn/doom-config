@@ -15,6 +15,7 @@
   - [[#org-super-agenda][Org Super Agenda]]
   - [[#org-capture-templates][Org Capture Templates]]
   - [[#auto-update-project-state][Auto Update Project State]]
+  - [[#archive-completed-tasks][Archive Completed Tasks]]
 - [[#markdown][Markdown]]
   - [[#toggle-markdown-view][Toggle Markdown View]]
 - [[#terminal][Terminal]]
