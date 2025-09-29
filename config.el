@@ -1,9 +1,9 @@
-(setq doom-theme 'doom-palenight)
+(setq doom-theme 'doom-vibrant)
 
 (setq doom-font (font-spec :family "Iosevka SS04" :size 15 :weight 'regular))
 
 (custom-theme-set-faces!
-'doom-palenight
+'doom-vibrant
 '(org-level-8 :inherit outline-3 :height 0.7)
 '(org-level-7 :inherit outline-3 :height 0.8)
 '(org-level-6 :inherit outline-3 :height 0.9)
