@@ -142,11 +142,41 @@ Core org-mode configuration including directory structure, TODO keyword sequence
 #+end_src
 ** Org Super Agenda
 Configures org-super-agenda for enhanced agenda views with smart grouping. Provides custom commands for day view, week view, next actions (grouped by energy/context/time), waiting tasks, and project overviews. Each view uses super-agenda's powerful grouping capabilities to organize tasks by priority, context, energy level, and time requirements for more effective task management.
+
+Custom agenda prefix function displays the parent project name for tasks that belong to a project, and shows nothing for standalone tasks (instead of showing the filename).
 #+begin_src emacs-lisp
+(defun adaen/org-agenda-prefix-project ()
+  "Return the parent project name if task is under a PROJECT, otherwise empty string.
+Strips tracking cookies like [1/5] or [25%] from the project name."
+  (let ((project-name ""))
+    (save-excursion
+      (org-back-to-heading t)
+      (while (and (org-up-heading-safe)
+                  (string= project-name ""))
+        (when (member (org-get-todo-state) '("PROJECT" "PROJECT-HOLD"))
+          (setq project-name (org-get-heading t t t t)))))
+    (if (string= project-name "")
+        ""
+      ;; Remove tracking cookies [1/5] or [25%]
+      (setq project-name (replace-regexp-in-string "\\[\\([0-9]+\\)/\\([0-9]+\\)\\]\\|\\[[0-9]+%\\]" "" project-name))
+      (setq project-name (string-trim project-name))
+      (format "%-25s " (truncate-string-to-width project-name 25 nil nil "…")))))
+
 (use-package! org-super-agenda
   :after org-agenda
   :config
   (org-super-agenda-mode)
+
+  ;; Set custom agenda prefix format to show project names
+  (setq org-agenda-prefix-format
+        '((agenda . " %i %(adaen/org-agenda-prefix-project)%?-12t% s")
+          (todo . " %i %(adaen/org-agenda-prefix-project)")
+          (tags . " %i %-12:c")
+          (search . " %i %-12:c")))
+
+  ;; Customize deadline/scheduled text
+  (setq org-agenda-scheduled-leaders '("" ""))
+  (setq org-agenda-deadline-leaders '("Deadline: " "In %d days: " "Overdue %d days: "))
 
   (setq org-agenda-custom-commands
         '(("d" "Day View"

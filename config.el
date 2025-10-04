@@ -95,10 +95,38 @@
           ("@medium" . ?6)     ; 1-4h
           ("@long" . ?7))))
 
+(defun adaen/org-agenda-prefix-project ()
+  "Return the parent project name if task is under a PROJECT, otherwise empty string.
+Strips tracking cookies like [1/5] or [25%] from the project name."
+  (let ((project-name ""))
+    (save-excursion
+      (org-back-to-heading t)
+      (while (and (org-up-heading-safe)
+                  (string= project-name ""))
+        (when (member (org-get-todo-state) '("PROJECT" "PROJECT-HOLD"))
+          (setq project-name (org-get-heading t t t t)))))
+    (if (string= project-name "")
+        ""
+      ;; Remove tracking cookies [1/5] or [25%]
+      (setq project-name (replace-regexp-in-string "\\[\\([0-9]+\\)/\\([0-9]+\\)\\]\\|\\[[0-9]+%\\]" "" project-name))
+      (setq project-name (string-trim project-name))
+      (format "%-25s " (truncate-string-to-width project-name 25 nil nil "…")))))
+
 (use-package! org-super-agenda
   :after org-agenda
   :config
   (org-super-agenda-mode)
+
+  ;; Set custom agenda prefix format to show project names
+  (setq org-agenda-prefix-format
+        '((agenda . " %i %(adaen/org-agenda-prefix-project)%?-12t% s")
+          (todo . " %i %(adaen/org-agenda-prefix-project)")
+          (tags . " %i %-12:c")
+          (search . " %i %-12:c")))
+
+  ;; Customize deadline/scheduled text
+  (setq org-agenda-scheduled-leaders '("" ""))
+  (setq org-agenda-deadline-leaders '("Deadline: " "In %d days: " "Overdue %d days: "))
 
   (setq org-agenda-custom-commands
         '(("d" "Day View"
