@@ -7,6 +7,7 @@
 - [[#appearance][Appearance]]
   - [[#org-headers][Org Headers]]
   - [[#markdown-headers][Markdown Headers]]
+  - [[#org-agenda-headers][Org Agenda Headers]]
 - [[#keybindings][Keybindings]]
   - [[#comment-line][Comment Line]]
   - [[#toggle-bindings][Toggle bindings]]
@@ -53,6 +54,12 @@
  '(markdown-header-face-4 ((t (:inherit markdown-header-face :height 1.1))))
  '(markdown-header-face-5 ((t (:inherit markdown-header-face :height 1.0))))
  '(markdown-header-face-6 ((t (:inherit markdown-header-face :height 0.9)))))
+#+end_src
+** Org Agenda Headers
+Customize org-super-agenda section headers to stand out with a distinct color, making it easy to visually separate different agenda sections.
+#+begin_src emacs-lisp
+(custom-set-faces
+ '(org-super-agenda-header ((t (:foreground "#51afef" :weight bold :height 1.1)))))
 #+end_src
 * Keybindings
 ** Comment Line

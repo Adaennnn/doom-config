@@ -24,6 +24,9 @@
  '(markdown-header-face-5 ((t (:inherit markdown-header-face :height 1.0))))
  '(markdown-header-face-6 ((t (:inherit markdown-header-face :height 0.9)))))
 
+(custom-set-faces
+ '(org-super-agenda-header ((t (:foreground "#51afef" :weight bold :height 1.1)))))
+
 (map! :leader
       :desc "Comment line" "-" #'comment-line)
 
