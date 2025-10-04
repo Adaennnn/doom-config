@@ -1,7 +1,7 @@
 ;;; config.el -*- lexical-binding: t -*-
 (setq doom-theme 'doom-vibrant)
 
-(setq doom-font (font-spec :family "Iosevka SS04" :size 15 :weight 'regular))
+(setq doom-font (font-spec :family "Iosevka SS04" :size 28 :weight 'regular))
 
 (custom-theme-set-faces!
 'doom-vibrant
