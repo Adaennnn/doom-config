@@ -293,8 +293,13 @@
     (defun disable-line-numbers-h ()
       (display-line-numbers-mode -1))))
 
+(setq auto-save-default t
+      auto-save-timeout 20  ;; auto-save after 20 seconds idle
+      auto-save-interval 200) ;; auto-save after 200 keystrokes
+
 (setq confirm-kill-emacs nil) ;; Don't confirm on exit
 (setq display-line-numbers-type t) ;; Turn line numbers on
+
 ;; Forces Emacs to start in fullscreen
 (when (display-graphic-p)
   (setq initial-frame-alist
