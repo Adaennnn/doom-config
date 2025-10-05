@@ -95,32 +95,19 @@
           ("@medium" . ?6)     ; 1-4h
           ("@long" . ?7))))
 
-(defun adaen/org-agenda-prefix-project ()
-  "Return the parent project name if task is under a PROJECT, otherwise empty string.
-Strips tracking cookies like [1/5] or [25%] from the project name."
-  (let ((project-name ""))
-    (save-excursion
-      (org-back-to-heading t)
-      (while (and (org-up-heading-safe)
-                  (string= project-name ""))
-        (when (member (org-get-todo-state) '("PROJECT" "PROJECT-HOLD"))
-          (setq project-name (org-get-heading t t t t)))))
-    (if (string= project-name "")
-        ""
-      ;; Remove tracking cookies [1/5] or [25%]
-      (setq project-name (replace-regexp-in-string "\\[\\([0-9]+\\)/\\([0-9]+\\)\\]\\|\\[[0-9]+%\\]" "" project-name))
-      (setq project-name (string-trim project-name))
-      (format "%-25s " (truncate-string-to-width project-name 25 nil nil "…")))))
+(defun adaen/org-agenda-clean-prefix ()
+  "Return empty string for clean agenda display without filenames or project names."
+  "")
 
 (use-package! org-super-agenda
   :after org-agenda
   :config
   (org-super-agenda-mode)
 
-  ;; Set custom agenda prefix format to show project names
+  ;; Set custom agenda prefix format for clean display
   (setq org-agenda-prefix-format
-        '((agenda . " %i %(adaen/org-agenda-prefix-project)%?-12t% s")
-          (todo . " %i %(adaen/org-agenda-prefix-project)")
+        '((agenda . " %i %(adaen/org-agenda-clean-prefix)%?-12t% s")
+          (todo . " %i %(adaen/org-agenda-clean-prefix)")
           (tags . " %i %-12:c")
           (search . " %i %-12:c")))
 
@@ -155,16 +142,7 @@ Strips tracking cookies like [1/5] or [25%] from the project name."
            ((agenda ""
                     ((org-agenda-span 7)
                      (org-agenda-start-day ".")
-                     (org-agenda-start-on-weekday 0)
-                     (org-super-agenda-groups
-                      '((:name "Overdue"
-                         :deadline past
-                         :scheduled past)
-                        (:name "Today"
-                         :time-grid t
-                         :date today)
-                        (:name "This Week"
-                         :date t)))))))
+                     (org-agenda-start-on-weekday 0)))))
 
           ("n" "Next Actions"
            ((todo "NEXT"
@@ -291,14 +269,14 @@ Strips tracking cookies like [1/5] or [25%] from the project name."
                 (= level 2))
            (org-archive-subtree)
            (setq archived-count (1+ archived-count))
-           (setq org-map-continue-from (org-element-property :begin (org-element-at-point))))
+           (setq org-map-continue-from (point)))
 
           ;; Archive DONE tasks under "Standalone Tasks" or "Recurring Tasks"
           ((and (string= state "DONE")
                 (member parent-heading '("Standalone Tasks" "Recurring Tasks")))
            (org-archive-subtree)
            (setq archived-count (1+ archived-count))
-           (setq org-map-continue-from (org-element-property :begin (org-element-at-point)))))))
+           (setq org-map-continue-from (point))))))
      nil 'file)
     (message "Archived %d item(s)" archived-count)))
 
