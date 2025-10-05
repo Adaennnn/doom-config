@@ -15,6 +15,7 @@
   - [[#basic-settings][Basic Settings]]
   - [[#org-super-agenda][Org Super Agenda]]
   - [[#org-capture-templates][Org Capture Templates]]
+  - [[#org-refile][Org Refile]]
   - [[#auto-update-project-state][Auto Update Project State]]
   - [[#archive-completed-tasks][Archive Completed Tasks]]
 - [[#markdown][Markdown]]
@@ -67,7 +68,7 @@
       :desc "Comment line" "-" #'comment-line)
 #+end_src
 ** Toggle bindings
-Convenient keybindings for common toggles under the `SPC t` prefix. Includes terminal toggles, spawns them using a small amount of the frame size, display options (line numbers, trucate lines), and interface elements (treemacs, markdown view mode). The `SPC o` prefix provides variants that spwan terminals using the whole frame.
+Convenient keybindings for common toggles under the `SPC t` prefix. Includes terminal toggles, spawns them using a small amount of the frame size, display options (line numbers, truncate lines), and interface elements (treemacs, markdown view mode). The `SPC o` prefix provides variants that spawn terminals using the whole frame.
 #+begin_src emacs-lisp
 (map! :leader
       (:prefix ("t" . "toggle")
@@ -265,6 +266,22 @@ Quick capture template for inbox items. Press `SPC X i` to capture a new task di
                  (file "~/org/gtd/inbox.org")
                  "* %?\n"
                  :prepend nil)))
+#+end_src
+
+** Org Refile
+Configure refiling to move tasks from inbox.org to your GTD system. Use ~SPC m r r~ on a task to refile it. The setup supports:
+- main.org: Active projects and tasks (up to level 3)
+- someday-maybe.org: Future considerations (up to level 2 - into categories)
+- references.org: Reference materials (up to level 2 - into sections)
+
+File-based completion shows the full path to make it easy to find the right destination.
+#+begin_src emacs-lisp
+(after! org
+  (setq org-refile-targets '(("~/org/gtd/main.org" :maxlevel . 3)
+                             ("~/org/gtd/someday-maybe.org" :maxlevel . 2)
+                             ("~/org/gtd/references.org" :maxlevel . 2))
+        org-refile-use-outline-path 'file
+        org-outline-path-complete-in-steps nil))
 #+end_src
 
 ** Auto Update Project State

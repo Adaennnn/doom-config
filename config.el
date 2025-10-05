@@ -213,6 +213,13 @@
                  "* %?\n"
                  :prepend nil)))
 
+(after! org
+  (setq org-refile-targets '(("~/org/gtd/main.org" :maxlevel . 3)
+                             ("~/org/gtd/someday-maybe.org" :maxlevel . 2)
+                             ("~/org/gtd/references.org" :maxlevel . 2))
+        org-refile-use-outline-path 'file
+        org-outline-path-complete-in-steps nil))
+
 (defun adaen/update-project-state ()
   "Auto-update PROJECT states based on child tasks.
   - PROJECT → PROJECT-HOLD: when has WAITING child and no NEXT children
