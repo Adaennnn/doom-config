@@ -15,17 +15,17 @@
 '(org-level-1 :inherit outline-1 :height 1.4)
 '(org-document-title :height 1.6 :bold t :underline nil))
 
-(custom-set-faces
- '(markdown-header-face ((t (:inherit font-lock-function-name-face :weight bold :family "Iosevka SS04"))))
- '(markdown-header-face-1 ((t (:inherit markdown-header-face :height 1.4))))
- '(markdown-header-face-2 ((t (:inherit markdown-header-face :height 1.3))))
- '(markdown-header-face-3 ((t (:inherit markdown-header-face :height 1.2))))
- '(markdown-header-face-4 ((t (:inherit markdown-header-face :height 1.1))))
- '(markdown-header-face-5 ((t (:inherit markdown-header-face :height 1.0))))
- '(markdown-header-face-6 ((t (:inherit markdown-header-face :height 0.9)))))
+(custom-theme-set-faces! 'doom-vibrant
+ '(markdown-header-face :inherit font-lock-function-name-face :weight bold :family "Iosevka SS04")
+ '(markdown-header-face-1 :inherit markdown-header-face :height 1.4)
+ '(markdown-header-face-2 :inherit markdown-header-face :height 1.3)
+ '(markdown-header-face-3 :inherit markdown-header-face :height 1.2)
+ '(markdown-header-face-4 :inherit markdown-header-face :height 1.1)
+ '(markdown-header-face-5 :inherit markdown-header-face :height 1.0)
+ '(markdown-header-face-6 :inherit markdown-header-face :height 0.9))
 
-(custom-set-faces
- '(org-super-agenda-header ((t (:foreground "#51afef" :weight bold :height 1.1)))))
+(custom-theme-set-faces! 'doom-vibrant
+ '(org-super-agenda-header :foreground "#51afef" :weight bold :height 1.1))
 
 (map! :leader
       :desc "Comment line" "-" #'comment-line)
@@ -42,8 +42,12 @@
 (map! :leader
       (:prefix ("o" . "open here")
        :desc "Open eshell here"    "e" #'+eshell/here
-       :desc "Open vterm here"     "v" #'+vterm/here
-       :desc "Archive completed tasks" "z" #'adaen/archive-completed-tasks))
+       :desc "Open vterm here"     "v" #'+vterm/here))
+
+(map! :after org
+      :map org-mode-map
+      :localleader
+      :desc "Archive completed tasks" "a" #'adaen/archive-completed-tasks)
 
 (after! org
   (setq org-directory "~/org/")
@@ -93,7 +97,22 @@
           ("@quick" . ?4)      ; < 15m
           ("@short" . ?5)      ; 15-60m
           ("@medium" . ?6)     ; 1-4h
-          ("@long" . ?7))))
+          ("@long" . ?7)))
+
+  ;; Capture templates
+  (setq org-capture-bookmark nil) ; Disable bookmark creation on capture
+  (add-to-list 'org-capture-templates
+               '("i" "Inbox" entry
+                 (file "~/org/gtd/inbox.org")
+                 "* %?\n"
+                 :prepend nil))
+
+  ;; Refile targets
+  (setq org-refile-targets '(("~/org/gtd/main.org" :maxlevel . 3)
+                             ("~/org/gtd/someday-maybe.org" :maxlevel . 2)
+                             ("~/org/gtd/references.org" :maxlevel . 2))
+        org-refile-use-outline-path 'file
+        org-outline-path-complete-in-steps nil))
 
 (defun adaen/org-agenda-clean-prefix ()
   "Return empty string for clean agenda display without filenames or project names."
@@ -205,21 +224,6 @@
   ;; Additional super-agenda settings
   (setq org-super-agenda-header-map nil)) ; Disable super-agenda keybindings
 
-(after! org
-  (setq org-capture-bookmark nil) ; Disable bookmark creation on capture
-  (add-to-list 'org-capture-templates
-               '("i" "Inbox" entry
-                 (file "~/org/gtd/inbox.org")
-                 "* %?\n"
-                 :prepend nil)))
-
-(after! org
-  (setq org-refile-targets '(("~/org/gtd/main.org" :maxlevel . 3)
-                             ("~/org/gtd/someday-maybe.org" :maxlevel . 2)
-                             ("~/org/gtd/references.org" :maxlevel . 2))
-        org-refile-use-outline-path 'file
-        org-outline-path-complete-in-steps nil))
-
 (defun adaen/update-project-state ()
   "Auto-update PROJECT states based on child tasks.
   - PROJECT → PROJECT-HOLD: when has WAITING child and no NEXT children
@@ -294,7 +298,6 @@
       (markdown-mode)
     (markdown-view-mode)))
 
-;; Disable line numbers
 (after! vterm
   (add-hook! 'vterm-mode-hook
     (defun disable-line-numbers-h ()
