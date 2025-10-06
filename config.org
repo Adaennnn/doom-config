@@ -21,6 +21,8 @@
   - [[#toggle-markdown-view][Toggle Markdown View]]
 - [[#terminal][Terminal]]
 - [[#system-settings][System Settings]]
+  - [[#auto-save-configuration][Auto-save Configuration]]
+  - [[#ui-and-display-settings][UI and Display Settings]]
 
 * Core Settings
 #+begin_src emacs-lisp
@@ -374,18 +376,22 @@ Terminal configuration for vterm. Disables line numbers in terminal buffers for 
       (display-line-numbers-mode -1))))
 #+end_src
 * System Settings
+** Auto-save Configuration
+Automatically save file-visiting buffers every 20 seconds to prevent data loss.
+
 #+begin_src emacs-lisp
-(setq auto-save-default t
-      auto-save-timeout 20  ;; auto-save after 20 seconds idle
-      auto-save-interval 200) ;; auto-save after 200 keystrokes
+;; Enable auto-save globally - saves directly to files (not #file# backups)
+(auto-save-visited-mode 1)
+(setq auto-save-visited-interval 20) ;; Save every 20 seconds
+#+end_src
 
-(setq confirm-kill-emacs nil) ;; Don't confirm on exit
-(setq display-line-numbers-type t) ;; Turn line numbers on
+** UI and Display Settings
+#+begin_src emacs-lisp
+(setq display-line-numbers-type t)   ;; Show line numbers by default
+(setq confirm-kill-emacs nil)        ;; Don't confirm on exit
 
-;; Forces Emacs to start in fullscreen
+;; Start Emacs in fullscreen
 (when (display-graphic-p)
-  (setq initial-frame-alist
-        '((fullscreen . maximized)))
-  (setq default-frame-alist
-        '((fullscreen . maximized))))
+  (setq initial-frame-alist '((fullscreen . maximized)))
+  (setq default-frame-alist '((fullscreen . maximized))))
 #+end_src

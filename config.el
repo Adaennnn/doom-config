@@ -303,16 +303,14 @@
     (defun disable-line-numbers-h ()
       (display-line-numbers-mode -1))))
 
-(setq auto-save-default t
-      auto-save-timeout 20  ;; auto-save after 20 seconds idle
-      auto-save-interval 200) ;; auto-save after 200 keystrokes
+;; Enable auto-save globally - saves directly to files (not #file# backups)
+(auto-save-visited-mode 1)
+(setq auto-save-visited-interval 20) ;; Save every 20 seconds
 
-(setq confirm-kill-emacs nil) ;; Don't confirm on exit
-(setq display-line-numbers-type t) ;; Turn line numbers on
+(setq display-line-numbers-type t)   ;; Show line numbers by default
+(setq confirm-kill-emacs nil)        ;; Don't confirm on exit
 
-;; Forces Emacs to start in fullscreen
+;; Start Emacs in fullscreen
 (when (display-graphic-p)
-  (setq initial-frame-alist
-        '((fullscreen . maximized)))
-  (setq default-frame-alist
-        '((fullscreen . maximized))))
+  (setq initial-frame-alist '((fullscreen . maximized)))
+  (setq default-frame-alist '((fullscreen . maximized))))
