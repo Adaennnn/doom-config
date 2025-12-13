@@ -71,8 +71,8 @@ The `adaen/update-project-state` function automatically manages project states:
 - PROJECT-HOLD → PROJECT when NEXT child added
 
 ### Org Files
-- Main agenda file: `~/org/gtd/main.org`
-- Archive location: `~/org/gtd/archive.org`
+- Main agenda file: `~/Syncthing/org/gtd/main.org`
+- Archive location: `~/Syncthing/org/gtd/archive.org`
 
 ## Custom Functions
 
