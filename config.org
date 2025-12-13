@@ -103,7 +103,7 @@ Also configures capture templates for quick inbox entry and refile targets for G
 
 #+begin_src emacs-lisp
 (after! org
-  (setq org-directory "~/org/")
+  (setq org-directory "~/Syncthing/org/")
 
   (setq org-todo-keywords
         '((sequence
@@ -127,9 +127,9 @@ Also configures capture templates for quick inbox entry and refile targets for G
           ("PROJECT" :foreground "#9b59b6" :weight normal)
           ("PROJECT-HOLD" :foreground "#f39c12" :weight normal)))
 
-  (setq org-agenda-files '("~/org/gtd/main.org"))
+  (setq org-agenda-files '("~/Syncthing/org/gtd/main.org"))
 
-  (setq org-archive-location "~/org/gtd/archive.org::datetree/"
+  (setq org-archive-location "~/Syncthing/org/gtd/archive.org::datetree/"
         org-archive-subtree-save-file-p t)
 
   (setq org-tag-alist
@@ -156,14 +156,14 @@ Also configures capture templates for quick inbox entry and refile targets for G
   (setq org-capture-bookmark nil) ; Disable bookmark creation on capture
   (add-to-list 'org-capture-templates
                '("i" "Inbox" entry
-                 (file "~/org/gtd/inbox.org")
+                 (file "~/Syncthing/org/gtd/inbox.org")
                  "* %?\n"
                  :prepend nil))
 
   ;; Refile targets
-  (setq org-refile-targets '(("~/org/gtd/main.org" :maxlevel . 3)
-                             ("~/org/gtd/someday-maybe.org" :maxlevel . 2)
-                             ("~/org/gtd/references.org" :maxlevel . 2))
+  (setq org-refile-targets '(("~/Syncthing/org/gtd/main.org" :maxlevel . 3)
+                             ("~/Syncthing/org/gtd/someday-maybe.org" :maxlevel . 2)
+                             ("~/Syncthing/org/gtd/references.org" :maxlevel . 2))
         org-refile-use-outline-path 'file
         org-outline-path-complete-in-steps nil))
 #+end_src

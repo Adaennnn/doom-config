@@ -5,24 +5,24 @@
 
 (custom-theme-set-faces!
 'doom-vibrant
-'(org-level-8 :inherit outline-3 :height 0.7)
-'(org-level-7 :inherit outline-3 :height 0.8)
-'(org-level-6 :inherit outline-3 :height 0.9)
+'(org-level-8 :inherit outline-3 :height 1.0)
+'(org-level-7 :inherit outline-3 :height 1.0)
+'(org-level-6 :inherit outline-3 :height 1.0)
 '(org-level-5 :inherit outline-3 :height 1.0)
-'(org-level-4 :inherit outline-3 :height 1.1)
-'(org-level-3 :inherit outline-3 :height 1.2)
-'(org-level-2 :inherit outline-2 :height 1.3)
-'(org-level-1 :inherit outline-1 :height 1.4)
-'(org-document-title :height 1.6 :bold t :underline nil))
+'(org-level-4 :inherit outline-3 :height 1.05)
+'(org-level-3 :inherit outline-3 :height 1.1)
+'(org-level-2 :inherit outline-2 :height 1.15)
+'(org-level-1 :inherit outline-1 :height 1.2)
+'(org-document-title :height 1.3 :bold t :underline nil))
 
 (custom-theme-set-faces! 'doom-vibrant
  '(markdown-header-face :inherit font-lock-function-name-face :weight bold :family "Iosevka SS04")
- '(markdown-header-face-1 :inherit markdown-header-face :height 1.4)
- '(markdown-header-face-2 :inherit markdown-header-face :height 1.3)
- '(markdown-header-face-3 :inherit markdown-header-face :height 1.2)
- '(markdown-header-face-4 :inherit markdown-header-face :height 1.1)
+ '(markdown-header-face-1 :inherit markdown-header-face :height 1.2)
+ '(markdown-header-face-2 :inherit markdown-header-face :height 1.15)
+ '(markdown-header-face-3 :inherit markdown-header-face :height 1.1)
+ '(markdown-header-face-4 :inherit markdown-header-face :height 1.05)
  '(markdown-header-face-5 :inherit markdown-header-face :height 1.0)
- '(markdown-header-face-6 :inherit markdown-header-face :height 0.9))
+ '(markdown-header-face-6 :inherit markdown-header-face :height 1.0))
 
 (custom-theme-set-faces! 'doom-vibrant
  '(org-super-agenda-header :foreground "#51afef" :weight bold :height 1.1))
@@ -50,7 +50,7 @@
       :desc "Archive completed tasks" "a" #'adaen/archive-completed-tasks)
 
 (after! org
-  (setq org-directory "~/org/")
+  (setq org-directory "~/Syncthing/org/")
 
   (setq org-todo-keywords
         '((sequence
@@ -74,9 +74,9 @@
           ("PROJECT" :foreground "#9b59b6" :weight normal)
           ("PROJECT-HOLD" :foreground "#f39c12" :weight normal)))
 
-  (setq org-agenda-files '("~/org/gtd/main.org"))
+  (setq org-agenda-files '("~/Syncthing/org/gtd/main.org"))
 
-  (setq org-archive-location "~/org/gtd/archive.org::datetree/"
+  (setq org-archive-location "~/Syncthing/org/gtd/archive.org::datetree/"
         org-archive-subtree-save-file-p t)
 
   (setq org-tag-alist
@@ -103,14 +103,14 @@
   (setq org-capture-bookmark nil) ; Disable bookmark creation on capture
   (add-to-list 'org-capture-templates
                '("i" "Inbox" entry
-                 (file "~/org/gtd/inbox.org")
+                 (file "~/Syncthing/org/gtd/inbox.org")
                  "* %?\n"
                  :prepend nil))
 
   ;; Refile targets
-  (setq org-refile-targets '(("~/org/gtd/main.org" :maxlevel . 3)
-                             ("~/org/gtd/someday-maybe.org" :maxlevel . 2)
-                             ("~/org/gtd/references.org" :maxlevel . 2))
+  (setq org-refile-targets '(("~/Syncthing/org/gtd/main.org" :maxlevel . 3)
+                             ("~/Syncthing/org/gtd/someday-maybe.org" :maxlevel . 2)
+                             ("~/Syncthing/org/gtd/references.org" :maxlevel . 2))
         org-refile-use-outline-path 'file
         org-outline-path-complete-in-steps nil))
 
