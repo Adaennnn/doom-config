@@ -303,6 +303,24 @@
     (defun disable-line-numbers-h ()
       (display-line-numbers-mode -1))))
 
+;; Ensure native compilation works on Apple Silicon
+(when (and (eq system-type 'darwin)
+           (string-match-p "aarch64" system-configuration))
+  (setenv "LIBRARY_PATH"
+          (concat (getenv "LIBRARY_PATH")
+                  ":/opt/homebrew/opt/gcc/lib/gcc/current"
+                  ":/opt/homebrew/opt/libgccjit/lib/gcc/current")))
+
+(setq native-comp-async-report-warnings-errors 'silent)
+
+;; GC tuning - critical for LSP performance
+(setq gc-cons-threshold (* 100 1024 1024))   ; 100MB
+(setq read-process-output-max (* 1024 1024)) ; 1MB for LSP
+
+;; Faster rendering
+(setq fast-but-imprecise-scrolling t)
+(setq redisplay-skip-fontification-on-input t)
+
 ;; Enable auto-save globally - saves directly to files (not #file# backups)
 (auto-save-visited-mode 1)
 (setq auto-save-visited-interval 20) ;; Save every 20 seconds

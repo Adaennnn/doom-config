@@ -21,6 +21,7 @@
   - [[#toggle-markdown-view][Toggle Markdown View]]
 - [[#terminal][Terminal]]
 - [[#system-settings][System Settings]]
+  - [[#performance-optimization][Performance Optimization]]
   - [[#auto-save-configuration][Auto-save Configuration]]
   - [[#ui-and-display-settings][UI and Display Settings]]
 
@@ -376,6 +377,29 @@ Terminal configuration for vterm. Disables line numbers in terminal buffers for 
       (display-line-numbers-mode -1))))
 #+end_src
 * System Settings
+** Performance Optimization
+Native compilation and garbage collection tuning for improved performance, particularly important for LSP and large codebases. The native compilation path fix is required for Apple Silicon Macs to locate GCC libraries. GC threshold is increased to reduce pause frequency during intensive operations.
+
+#+begin_src emacs-lisp
+;; Ensure native compilation works on Apple Silicon
+(when (and (eq system-type 'darwin)
+           (string-match-p "aarch64" system-configuration))
+  (setenv "LIBRARY_PATH"
+          (concat (getenv "LIBRARY_PATH")
+                  ":/opt/homebrew/opt/gcc/lib/gcc/current"
+                  ":/opt/homebrew/opt/libgccjit/lib/gcc/current")))
+
+(setq native-comp-async-report-warnings-errors 'silent)
+
+;; GC tuning - critical for LSP performance
+(setq gc-cons-threshold (* 100 1024 1024))   ; 100MB
+(setq read-process-output-max (* 1024 1024)) ; 1MB for LSP
+
+;; Faster rendering
+(setq fast-but-imprecise-scrolling t)
+(setq redisplay-skip-fontification-on-input t)
+#+end_src
+
 ** Auto-save Configuration
 Automatically save file-visiting buffers every 20 seconds to prevent data loss.
 
