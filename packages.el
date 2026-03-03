@@ -54,3 +54,4 @@
 ;; (unpin! t)
 
 (package! org-super-agenda)
+(package! ob-d2)

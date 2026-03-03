@@ -14,6 +14,7 @@
   - [[#org-bindings][Org bindings]]
 - [[#org-mode][Org Mode]]
   - [[#basic-settings][Basic Settings]]
+  - [[#org-babel][Org Babel]]
   - [[#org-super-agenda][Org Super Agenda]]
   - [[#auto-update-project-state][Auto Update Project State]]
   - [[#archive-completed-tasks][Archive Completed Tasks]]
@@ -167,6 +168,14 @@ Also configures capture templates for quick inbox entry and refile targets for G
                              ("~/Syncthing/org/gtd/references.org" :maxlevel . 2))
         org-refile-use-outline-path 'file
         org-outline-path-complete-in-steps nil))
+#+end_src
+** Org Babel
+Registers additional languages for org-babel code block evaluation. D2 is used for diagrams rendered to SVG inline.
+#+begin_src emacs-lisp
+(after! org
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   (append org-babel-load-languages '((d2 . t)))))
 #+end_src
 ** Org Super Agenda
 Configures org-super-agenda for enhanced agenda views with smart grouping. Provides custom commands for day view, week view, next actions (grouped by energy/context/time), waiting tasks, and project overviews. Each view uses super-agenda's powerful grouping capabilities to organize tasks by priority, context, energy level, and time requirements for more effective task management.

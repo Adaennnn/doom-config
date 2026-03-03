@@ -114,6 +114,11 @@
         org-refile-use-outline-path 'file
         org-outline-path-complete-in-steps nil))
 
+(after! org
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   (append org-babel-load-languages '((d2 . t)))))
+
 (defun adaen/org-agenda-clean-prefix ()
   "Return empty string for clean agenda display without filenames or project names."
   "")

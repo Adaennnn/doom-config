@@ -4,227 +4,92 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Configuration Structure
 
-This is a Doom Emacs literate configuration that uses Org mode for documentation and configuration management. The main configuration is written in `config.org`, which is tangled to generate `config.el`.
+This is a Doom Emacs literate configuration. The `:config literate` module in init.el enables config.org to be automatically tangled to config.el on Doom restart. **Never edit config.el directly** — all changes go in config.org.
+
+- **config.org**: Literate configuration source (also symlinked as README.org for GitHub). All Emacs Lisp code blocks are tangled to config.el
+- **init.el**: Declares enabled Doom modules
+- **packages.el**: Additional packages beyond Doom's defaults
+- **config.el**: Auto-generated from config.org — do not edit
 
 ## Key Commands
 
 ```bash
-# Sync Doom configuration after modifying init.el or packages.el
+# Sync after modifying init.el or packages.el
 doom sync
-
-# Update Doom packages
-doom upgrade
-
-# Tangle config.org to regenerate config.el (automatically done by Doom)
-# Manual tangle: In Emacs: C-c C-v t (or SPC m b t in evil mode)
-
-# Access Doom documentation
-# In Emacs: SPC h d h (or C-h d h for non-vim users)
-
-# View module documentation
-# In Emacs: K on module name (or C-c c k for non-vim users)
 ```
 
-## Configuration Architecture
+When adding new packages: add to packages.el first, then run `doom sync` before using in config.org.
 
-- **config.org**: Literate configuration source file containing all Emacs Lisp code blocks that get tangled to config.el. Also symlinked as README.org for GitHub display
-- **init.el**: Declares which Doom modules are enabled (completion, ui, editor, tools, languages, etc.)
-- **packages.el**: Declares additional packages to install beyond Doom's defaults (currently includes org-super-agenda)
-- **config.el**: Generated from config.org - do not edit directly
+## Editing config.org
 
-## Module System
+### Section Layout
 
-The configuration uses Doom's module system with these enabled categories:
-- **Completion**: corfu with orderless, vertico
-- **UI**: doom theme, dashboard, hl-todo, ligatures, treemacs, smooth scrolling, vc-gutter with pretty flag
-- **Editor**: evil mode (vim keybindings), file templates, code folding, snippets
-- **Tools**: magit for git, eval with overlay, lookup for code navigation, tree-sitter
-- **Languages**: emacs-lisp, javascript (+tree-sitter), python, markdown, org (+pretty), shell scripting, web, yaml, data formats (json)
-- **Email**: mu4e with org and gmail support
-- **App**: RSS reader with org integration
+The file is organized in this order — add new configurations to the appropriate section:
 
-## Custom Functions and Keybindings
+1. **Core Settings** — theme, font, fundamental Doom settings
+2. **Appearance** — face customizations (org headers, markdown headers, agenda headers)
+3. **Keybindings** — custom key mappings using `map!` macro
+4. **Org Mode** — org-specific config (basic settings, super-agenda, project automation, archiving)
+5. **Markdown** — markdown-specific config
+6. **Terminal** — vterm/eshell settings
+7. **System Settings** — performance, auto-save, UI/display (always last)
 
-Custom functions use the `adaen/` prefix namespace. Key leader prefix is `SPC` in evil mode.
+### Code Block Format
 
-Notable custom keybindings:
-- `SPC -`: Comment line
-- `SPC t e`: Toggle eshell split
-- `SPC t l`: Toggle line numbers
-- `SPC t m`: Toggle markdown view mode
-- `SPC t t`: Toggle truncate lines
-- `SPC t T`: Toggle treemacs
-- `SPC t v`: Toggle vterm split
-- `SPC o e`: Open eshell here (full frame)
-- `SPC o v`: Open vterm here (full frame)
+Each section should have descriptive text before its code block:
 
-## Org Mode Configuration
-
-### TODO Keywords
-- Regular tasks: TODO → NEXT → RECURRING → WAITING → DONE
-- Projects: PROJECT → PROJECT-HOLD → PROJECT-DONE
-
-### Project State Automation
-The `adaen/update-project-state` function automatically manages project states:
-- PROJECT → PROJECT-HOLD when has WAITING child and no NEXT children
-- Any state → PROJECT-DONE when all children are DONE
-- PROJECT-HOLD → PROJECT when NEXT child added
-
-### Org Files
-- Main agenda file: `~/Syncthing/org/gtd/main.org`
-- Archive location: `~/Syncthing/org/gtd/archive.org`
-
-## Custom Functions
-
-- **adaen/toggle-markdown-view-mode**: Switches between markdown-mode (editing) and markdown-view-mode (reading)
-- **adaen/update-project-state**: Auto-updates PROJECT states based on child task completion
-
-## Best Practices for config.org Modifications
-
-### Literate Configuration Guidelines
-
-1. **Section Organization**: Add new configurations to the most appropriate existing section. If no section fits, create a new one with a clear, descriptive name.
-
-2. **Documentation First**: Code blocks should generally be preceded by a description explaining:
-   - What the configuration does
-   - Why it's needed
-   - Any dependencies or requirements
-   - Example usage (for functions and keybindings)
-
-3. **Code Block Structure**:
-   ```org
-   ** Section Title
-   Brief description of what this section configures and why.
-   #+begin_src emacs-lisp
-   ;; Your elisp code here
-   #+end_src
-   ```
-
-### Code Organization Rules
-
-1. **Section Placement**:
-   - Core Settings: Fundamental Emacs/Doom settings (theme, font, basic behavior)
-   - Appearance: Visual customizations (faces, themes, UI elements)
-   - Keybindings: Custom key mappings (use `map!` macro)
-   - [Mode] sections: Mode-specific configurations (Org Mode, Markdown, etc.)
-   - Terminal: Terminal/shell related settings
-   - System Settings: OS-level or Emacs system settings
-
-2. **Naming Conventions**:
-   - Custom functions: Use `adaen/` prefix (e.g., `adaen/toggle-feature`)
-   - Variables: Prefer descriptive names over single letters
-   - Keybinding descriptions: Generally start with verb ("Toggle", "Open", "Insert")
-
-3. **Load Order Considerations**:
-   - Use `after!` macro when configuring packages to ensure they're loaded first
-   - Place fundamental settings before dependent configurations
-   - Group related settings together
-
-### Common Patterns and Examples
-
-#### Adding a New Toggle Function
-```emacs-lisp
-(defun adaen/toggle-feature-name ()
-  "Toggle between two states of feature."
-  (interactive)
-  (if condition
-      (enable-action)
-    (disable-action)))
-
-(map! :leader
-      (:prefix ("t" . "toggle")
-       :desc "Toggle feature" "x" #'adaen/toggle-feature-name))
+```org
+** Section Title
+Brief description of what this configures and why.
+#+begin_src emacs-lisp
+;; elisp code here
+#+end_src
 ```
 
-#### Configuring a Package
-```emacs-lisp
-(after! package-name
-  (setq package-variable value)
-  (add-hook! 'package-mode-hook
-    (defun configure-package-h ()
-      ;; Configuration code
-      )))
-```
+### Conventions
 
-#### Adding Mode-Specific Settings
-```emacs-lisp
-(after! mode-name
-  ;; Mode variables
-  (setq mode-specific-var value)
-  ;; Mode hooks
-  (add-hook 'mode-name-hook #'function-to-run))
-```
+- Custom functions: prefix with `adaen/` (e.g., `adaen/toggle-feature`)
+- Keybinding descriptions: start with a verb ("Toggle", "Open", "Archive")
+- Use `after!` macro when configuring packages to ensure correct load order
+- Use `map!` macro for keybindings, following existing prefix patterns
+- Elisp comments: `;` end-of-line, `;;` line comments, `;;;` section headers
+- Keep lines under 80 characters when possible
+- The TOC uses the `:toc:` tag and auto-regenerates on save in Emacs
+
+### Leader Key Prefixes
+
+Maintain consistency with these existing prefixes:
+
+| Prefix  | Purpose           | Examples                                               |
+|---------|-------------------|--------------------------------------------------------|
+| `SPC t` | Toggles           | eshell, line numbers, markdown view, truncate, treemacs, vterm |
+| `SPC o` | Open (full frame) | eshell here, vterm here (Doom defaults also live here) |
+| `SPC m` | Local leader      | `SPC m a` archives completed tasks in org-mode         |
+| `SPC -` | Comment line      |                                                        |
+
+### Adding a Package
+
+1. Check if Doom already provides the functionality (review init.el modules)
+2. Add `(package! package-name)` to packages.el
+3. Run `doom sync`
+4. Configure in config.org using `(after! package-name ...)` or `(use-package! ...)`
 
 ### After Making Changes
 
-When modifying config.org:
-1. The file will be automatically tangled to config.el when Doom restarts
-2. Run `doom sync` if packages.el or init.el were modified
-3. User will handle testing and reloading
+1. config.org tangles automatically when Doom restarts
+2. Run `doom sync` only if packages.el or init.el were modified
+3. User handles testing and reloading
 
-### Package Management
+## Org Mode GTD System
 
-When your configuration requires new packages:
+### TODO Keywords
 
-1. **Check if package exists in Doom**:
-   - Review init.el modules first
-   - Check if Doom provides the functionality
+- Tasks: `TODO` → `NEXT` → `RECURRING` → `WAITING` → `DONE`
+- Projects: `PROJECT` → `PROJECT-HOLD` → `PROJECT-DONE`
 
-2. **Adding to packages.el**:
-   ```emacs-lisp
-   ;; In packages.el
-   (package! package-name)  ; From MELPA
-   (package! package-name :recipe (...))  ; Custom recipe
-   ```
+### Project State Automation
 
-3. **After adding packages**:
-   ```bash
-   doom sync  # Install new packages
-   doom doctor  # Check for issues
-   ```
-
-### Elisp Style Guide
-
-1. **Indentation**: Let Emacs handle it (use `indent-region`)
-2. **Comments**:
-   - Single `;` for end-of-line
-   - Double `;;` for line comments
-   - Triple `;;;` for section headers
-3. **Line Length**: Keep under 80 characters when possible
-4. **Parentheses**: Close on same line for short forms, new line for long blocks
-5. **Quotes**: Use `'` for symbols, `"` for strings
-
-### Keybinding Conventions
-
-1. **Leader Key Prefixes** (maintain consistency with these):
-   - `SPC t`: Toggles
-   - `SPC o`: Open/launch
-   - `SPC s`: Search
-   - `SPC f`: Files
-   - `SPC b`: Buffers
-   - `SPC w`: Windows
-   - `SPC p`: Projects
-
-2. **When Adding New Keybindings**:
-   - Use mnemonic keys (m for markdown, t for terminal)
-   - Avoid overriding Doom defaults
-   - Follow existing patterns in the config
-
-### Important Considerations
-
-1. **Syntax**: Ensure balanced parentheses and proper quoting
-2. **Load Order**: Use `after!` for package-specific settings
-3. **Package Dependencies**: Add to packages.el before using in config.org
-4. **Namespace**: Prefix custom functions with `adaen/`
-5. **Documentation**: Code blocks should have explanatory text for clarity
-
-### Working Philosophy
-
-These guidelines are meant to help maintain consistency and quality. Use your judgment when the situation calls for a different approach - the goal is readable, maintainable configuration, not rigid adherence to rules. Feel free to suggest improvements or optimizations when you notice opportunities, but avoid creating unnecessary files or over-engineering solutions.
-
-### Table of Contents Maintenance
-
-The TOC in config.org uses the `:toc:` tag. When adding new sections:
-- Add them with appropriate heading levels (`*`, `**`, etc.)
-- The TOC will be regenerated automatically when the file is saved in Emacs
-- Maintain consistent heading hierarchy for proper TOC structure
+`adaen/update-project-state` runs on `org-after-todo-state-change-hook`:
+- PROJECT → PROJECT-HOLD: has WAITING child, no NEXT children
+- Any → PROJECT-DONE: all children are DONE
+- PROJECT-HOLD → PROJECT: NEXT child added
