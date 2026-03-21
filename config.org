@@ -167,7 +167,13 @@ Also configures capture templates for quick inbox entry and refile targets for G
                              ("~/Syncthing/org/gtd/someday-maybe.org" :maxlevel . 2)
                              ("~/Syncthing/org/gtd/references.org" :maxlevel . 2))
         org-refile-use-outline-path 'file
-        org-outline-path-complete-in-steps nil))
+        org-outline-path-complete-in-steps nil)
+
+  ;; Inline images - use 800px default, override per-image with #+ATTR_ORG
+  (setq org-image-actual-width '(800))
+
+  ;; Open SVG files in Chrome
+  (add-to-list 'org-file-apps '("\\.svg\\'" . "open -a 'Google Chrome' %s")))
 #+end_src
 ** Org Babel
 Registers additional languages for org-babel code block evaluation. D2 is used for diagrams rendered to SVG inline.

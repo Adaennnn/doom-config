@@ -55,3 +55,4 @@
 
 (package! org-super-agenda)
 (package! ob-d2)
+(package! org-ql)

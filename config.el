@@ -112,7 +112,13 @@
                              ("~/Syncthing/org/gtd/someday-maybe.org" :maxlevel . 2)
                              ("~/Syncthing/org/gtd/references.org" :maxlevel . 2))
         org-refile-use-outline-path 'file
-        org-outline-path-complete-in-steps nil))
+        org-outline-path-complete-in-steps nil)
+
+  ;; Inline images - use 800px default, override per-image with #+ATTR_ORG
+  (setq org-image-actual-width '(800))
+
+  ;; Open SVG files in Chrome
+  (add-to-list 'org-file-apps '("\\.svg\\'" . "open -a 'Google Chrome' %s")))
 
 (after! org
   (org-babel-do-load-languages
