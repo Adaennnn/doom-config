@@ -23,7 +23,6 @@
 - [[#terminal][Terminal]]
 - [[#system-settings][System Settings]]
   - [[#performance-optimization][Performance Optimization]]
-  - [[#auto-save-configuration][Auto-save Configuration]]
   - [[#ui-and-display-settings][UI and Display Settings]]
 
 * Core Settings

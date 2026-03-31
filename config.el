@@ -332,10 +332,6 @@
 (setq fast-but-imprecise-scrolling t)
 (setq redisplay-skip-fontification-on-input t)
 
-;; Enable auto-save globally - saves directly to files (not #file# backups)
-(auto-save-visited-mode 1)
-(setq auto-save-visited-interval 20) ;; Save every 20 seconds
-
 (setq display-line-numbers-type t)   ;; Show line numbers by default
 (setq confirm-kill-emacs nil)        ;; Don't confirm on exit
 
