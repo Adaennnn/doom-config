@@ -415,14 +415,6 @@ Native compilation and garbage collection tuning for improved performance, parti
 (setq redisplay-skip-fontification-on-input t)
 #+end_src
 
-** Auto-save Configuration
-Automatically save file-visiting buffers every 20 seconds to prevent data loss.
-
-#+begin_src emacs-lisp
-;; Enable auto-save globally - saves directly to files (not #file# backups)
-(auto-save-visited-mode 1)
-(setq auto-save-visited-interval 20) ;; Save every 20 seconds
-#+end_src
 
 ** UI and Display Settings
 #+begin_src emacs-lisp
